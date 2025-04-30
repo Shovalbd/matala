@@ -1,0 +1,11 @@
+body{
+  direction: rtl;
+  padding: 15px;
+}
+.pointer{
+  cursor: pointer;
+}
+
+.activePost{
+  background-color: rgba(127, 255, 212, 0.168);
+}
