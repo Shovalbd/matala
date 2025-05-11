@@ -14,3 +14,7 @@ export interface PostForm{
 export interface CommentForm{
     content:string;
 }
+export interface ProfileForm{
+    username :string;
+    password :string;
+}

@@ -1,10 +1,10 @@
 const validation = {
     login:{
         email: {
-            required: "חובה לרשום מייל"
+            required: "חובה לרשום שם משתמש"
         },
         password:{
-            required: "חובה לרשום מייל",
+            required: "חובה לרשום סיסמה",
             minLength : {value:4  , message:"שם משתמש חייב להיות בין 4 ל 10"},
             maxLength : {value:10 , message:"שם משתמש חייב להיות בין 4 ל 10"},
         }
@@ -14,12 +14,12 @@ const validation = {
             required: "חובה לרשום מייל"
         },
         username:{
-            required: "חובה לרשום מייל",
+            required: "חובה לרשום שם משתמש",
             minLength : {value:4  , message:"שם משתמש חייב להיות בין 4 ל 10"},
             maxLength : {value:10 , message:"שם משתמש חייב להיות בין 4 ל 10"},
         },
         password:{
-            required: "חובה לרשום מייל",
+            required: "חובה לרשום סיסמא",
             minLength : {value:4  , message:"סיסמה חייב להיות בין 4 ל 10"},
             maxLength : {value:10 , message:"סיסמה חייב להיות בין 4 ל 10"},
         }
@@ -37,6 +37,17 @@ const validation = {
     comment:{
         content: {
             required:"שדה זה חובה",
+        }
+    },
+    profile:{
+        username:{
+            required: "חובה לרשום שם משתמש",
+            minLength : {value:4  , message:"שם משתמש חייב להיות בין 4 ל 10"},
+            maxLength : {value:10 , message:"שם משתמש חייב להיות בין 4 ל 10"},
+        },
+        password:{
+            minLength : {value:4  , message:"סיסמה חייב להיות בין 4 ל 10"},
+            maxLength : {value:10 , message:"סיסמה חייב להיות בין 4 ל 10"},
         }
     }
 }

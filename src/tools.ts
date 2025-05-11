@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const server = "http://localhost:3003";
+const server = "http://localhost:3004";
 
 export function GET(url:string){
     let token = sessionStorage.getItem("token") || "";

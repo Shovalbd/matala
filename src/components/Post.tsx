@@ -44,12 +44,13 @@ export default function Post(props :Prop){
     function addLike(p:PostI){
         POST("/posts/"+p._id+"/like/",{userId:p._id}).then(data=>{
             console.log("ddddD",data)
-            alert("עשית לייק")
             p.likes.push("...")
             setPosts([...posts])
-            //  setForceRender(prev => prev + 1);
-        }).catch((err)=>{})
+        }).catch((err)=>{
+            alert("כבר עשית לייק")
+        })
     }
+
 
     function updatePost(p:PostI){
         let title = prompt("נושא:",p.title) as string;
