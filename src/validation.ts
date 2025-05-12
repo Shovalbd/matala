@@ -1,53 +1,53 @@
 const validation = {
     login:{
         email: {
-            required: "חובה לרשום שם משתמש"
+            required:"Username required"
         },
         password:{
-            required: "חובה לרשום סיסמה",
-            minLength : {value:4  , message:"שם משתמש חייב להיות בין 4 ל 10"},
-            maxLength : {value:10 , message:"שם משתמש חייב להיות בין 4 ל 10"},
+            required: "Password required",
+            minLength : {value:4 , message:"Username must be between 4 and 10"},
+            maxLength : {value:10 , message:"Username must be between 4 and 10"},
         }
     },
     register:{
         email: {
-            required: "חובה לרשום מייל"
+            required: "Email required"
         },
         username:{
-            required: "חובה לרשום שם משתמש",
-            minLength : {value:4  , message:"שם משתמש חייב להיות בין 4 ל 10"},
-            maxLength : {value:10 , message:"שם משתמש חייב להיות בין 4 ל 10"},
+            required: "Username required",
+            minLength : {value:4 , message:"Username must be between 4 and 10"},
+            maxLength : {value:10 , message:"Username must be between 4 and 10"},
         },
         password:{
-            required: "חובה לרשום סיסמא",
-            minLength : {value:4  , message:"סיסמה חייב להיות בין 4 ל 10"},
-            maxLength : {value:10 , message:"סיסמה חייב להיות בין 4 ל 10"},
+            required: "Password required",
+            minLength : {value:4 , message:"Password must be between 4 and 10"},
+            maxLength : {value:10 , message:"Password must be between 4 and 10"},
         }
     },
     post:{
             title: {
-                required:"שדה זה חובה",
-                minLength:{value:4  , message:"נושא הפוסט חייב להיות בין 4 ל ר50"},
-                maxLength:{value:50 , message:"נושא הפוסט חייב להיות בין 4 ל ר50"},
+                required:"This field is required",
+                minLength:{value:4 , message:"The post subject must be between 4 and 50"},
+                maxLength:{value:50 , message:"The post subject must be between 4 and 50"},
             },
             content: {
-                required:"שדה זה חובה",
+                required:"This field is required",
             }
     },
     comment:{
         content: {
-            required:"שדה זה חובה",
+             required:"This field is required",
         }
     },
     profile:{
         username:{
-            required: "חובה לרשום שם משתמש",
-            minLength : {value:4  , message:"שם משתמש חייב להיות בין 4 ל 10"},
-            maxLength : {value:10 , message:"שם משתמש חייב להיות בין 4 ל 10"},
+            required: "Username required",
+            minLength : {value:4 , message:"Username must be between 4 and 10"},
+            maxLength : {value:10 , message:"Username must be between 4 and 10"},
         },
         password:{
-            minLength : {value:4  , message:"סיסמה חייב להיות בין 4 ל 10"},
-            maxLength : {value:10 , message:"סיסמה חייב להיות בין 4 ל 10"},
+            minLength : {value:4 , message:"Password must be between 4 and 10"},
+            maxLength : {value:10 , message:"Password must be between 4 and 10"},
         }
     }
 }

@@ -12,20 +12,19 @@ function App() {
     const [page, setPage]       = useState<Page>("Login")
     const [isLogin , setLogin]  = useState(false);
     const [user , setUser]      = useState<User>({} as User);
-    console.log("global" , {page,isLogin,user})
+
     useEffect(()=>{
-        GET("/user/").then(data=>{
-            let profile :User = data.data
+        GET("/user/")
+        .then(d=>{
+            let profile :User = d.data
             setLogin(true)
             setPage("Post")
             setUser(profile)
-            console.log("profile:",profile)
         })
         .catch(err=>{
             setLogin(false)
             setUser({} as User)
             setPage("Login")
-            console.log("profile:",err)
         })
     },[])
 

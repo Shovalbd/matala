@@ -9,12 +9,13 @@ export default function Register(props :Prop){
     let {register , handleSubmit, reset , formState:{errors}} = useForm<RegisterForm>();
 
     function registerIn(data:RegisterForm){
-        POST("/auth/register",{email:data.email, username: data.username, password:data.password}).then(d=>{
-            alert("נרשמת בהצלחה"); 
+        POST("/auth/register",{email:data.email, username: data.username, password:data.password})
+        .then(d=>{
+            alert("You have registered successfully"); 
             props.setPage("Login")
         })
         .catch(err=>{
-            alert("שם המשתמש או המייל קיימים במערכת");
+            alert("Username or email exists in the system");
         })
     }
 

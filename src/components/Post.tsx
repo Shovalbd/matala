@@ -16,7 +16,8 @@ export default function Post(props :Prop){
     const {register,reset,handleSubmit ,formState:{errors}} = useForm<PostForm>();
 
     useEffect(()=>{
-        GET("/posts/").then((data)=>{
+        GET("/posts/")
+        .then((data)=>{
             let p :PostI[] = data.data;
             setPosts(p)
         })
@@ -24,7 +25,8 @@ export default function Post(props :Prop){
     },[]);
     
     function clickPost(thePost:PostI){
-        GET("/posts/"+thePost._id+"/comments/").then((data)=>{
+        GET("/posts/"+thePost._id+"/comments/")
+        .then((data)=>{
             let c:Comment[] = data.data;
             setPost(thePost);
             setComments(c);
@@ -35,19 +37,19 @@ export default function Post(props :Prop){
 
     function addComment(data:CommentForm){
         POST("/comments/",{comment:data.content,postId:post?._id}).then(data=>{
-            alert("התגובה נשלחה בהצלחה");
+            alert("The response was sent successfully.");
             setComments([...comments,{...data.data,owner:{username:props.user.username}}])
             reset();
         }).catch((err)=>{})
     }
 
     function addLike(p:PostI){
-        POST("/posts/"+p._id+"/like/",{userId:p._id}).then(data=>{
-            console.log("ddddD",data)
+        POST("/posts/"+p._id+"/like/",{userId:p._id})
+        .then(data=>{
             p.likes.push("...")
             setPosts([...posts])
         }).catch((err)=>{
-            alert("כבר עשית לייק")
+            alert("You already liked it")
         })
     }
 
@@ -55,8 +57,9 @@ export default function Post(props :Prop){
     function updatePost(p:PostI){
         let title = prompt("נושא:",p.title) as string;
         let content = prompt("תוכן:",p.content) as string;
-        PUT("/posts/"+p._id ,{comment:content}).then(data=>{
-            alert("הפוסט נערכה בהצלחה")
+        PUT("/posts/"+p._id ,{title:title,content:content})
+        .then(data=>{
+            alert("The post was edited successfully")
             p.title = title;
             p.content = content;
             setPosts([...posts]);
@@ -64,10 +67,11 @@ export default function Post(props :Prop){
         .catch((err)=>{})
 
     }
+
     function updateComment(c:Comment){
         let content = prompt("תוכן:",c.comment) as string;
         PUT("/comments/"+c._id,{comment:content}).then(data=>{
-            alert("התגובה נערכה בהצלחה")
+            alert("The response was successfully edited")
             c.comment = content;
             setComments([...comments])
         })
@@ -96,30 +100,32 @@ export default function Post(props :Prop){
                             <div className={`post_item border m-3 p-3 d-flex flex-column ${active}`} key={p._id} >
                                 <div className="pointer  d-flex flex-column " onClick={()=>clickPost(p)}>
                                     <div className="post_title text-center text-decoration-underline fs-3">{p.title}</div>
-                                    <div className="post_title text-center text-decoration-underline fs-6">{p.owner.username}</div>
-                                    {p.owner.username == props.user.username ? 
-                                    <div className="align-self-end d-flex gap-2">
-                                        <button className="align-self-end" style={{width:70}} onClick={()=>deletePost(p)}>מחק</button> 
-                                        <button className="align-self-end" style={{width:70}} onClick={()=>updatePost(p)}>עדכן</button> 
+                                    <div className="display_username  post_title text-center text-decoration-underline fs-6">{p.owner.username}</div>
+                                    {
+                                    p.owner.username == props.user.username ? 
+                                    <div className="align-self-start mb-3 d-flex gap-2">
+                                        <button className="align-self-start mb-3" style={{width:70}} onClick={()=>deletePost(p)}>del</button> 
+                                        <button className="align-self-start mb-3" style={{width:70}} onClick={()=>updatePost(p)}>update</button> 
                                     
                                     </div>
                                         :
-                                        <button  className="align-self-end" style={{width:70}} onClick={()=>addLike(p)}>LIKE {p.likes.length}</button> 
+                                        <button  className="align-self-start mb-3" style={{width:70}} onClick={()=>addLike(p)}>LIKE {p.likes.length}</button> 
                                     }
                                 </div>
-                                {post?._id == p._id && <div className="comments">
-                                        <h6 className="text-end text-decoration-underline">תוכן:</h6>
+                                {
+                                post?._id == p._id && <div className="comments">
+                                        <h6 className="text-start text-decoration-underline">context:</h6>
                                         <p>{p.content}</p>
-                                        <h6 className="text-end text-decoration-underline">תגובות:</h6>
+                                        <h6 className="text-start text-decoration-underline">comments:</h6>
                                         {comments.map(c=>{
                                                 return(
-                                                    <div className="comment_item d-flex flex-column text-end border p-3 m-2" key={c._id}>
+                                                    <div className="comment_item d-flex flex-column text-start border p-3 m-2" key={c._id}>
                                                         <div className="text-decoration-underline">{c.owner.username}</div>
                                                         <div className="">{c.comment}</div>
                                                         {c.owner.username == props.user.username && 
-                                                            <div className="align-self-end d-flex gap-2">
-                                                                <button className="align-self-end" onClick={()=>deleteComment(c)}>מחק</button>
-                                                                <button className="align-self-end" onClick={()=>updateComment(c)}>עדכן</button>
+                                                            <div className="align-self-start mb-3 d-flex gap-2">
+                                                                <button className="align-self-start mb-3" onClick={()=>deleteComment(c)}>del</button>
+                                                                <button className="align-self-start mb-3" onClick={()=>updateComment(c)}>update</button>
                                                             </div>
                                                         }
                                                     </div>
@@ -127,15 +133,16 @@ export default function Post(props :Prop){
                                         })}
                                         <br/>
                                         <form className="m-auto mt-10 d-flex flex-column w-50" onSubmit={handleSubmit(addComment)}>
-                                            <h6 className="text-center text-decoration-underline">הוספת תגובה</h6>
-                                            <label className="text-decoration-underline">תוכן:</label>
+                                            <h6 className="text-center text-decoration-underline">add comment</h6>
+                                            <label className="text-decoration-underline">context:</label>
                                             <textarea {...register("content",validation.post.content)}></textarea>
                                             {errors.content && <span className="text-danger">{errors.content.message}</span>}
                                             <br/>
                                             <input type="submit"/>
                                         </form>
 
-                                </div>}
+                                </div>
+                                }
                             </div>
                         )
                     })
@@ -152,22 +159,25 @@ function FormAddPost({setPosts , posts , user} :any){
     const {register,reset,handleSubmit ,formState:{errors}} = useForm<PostForm>();
 
     function addPost(data:PostForm){
-        POST("/posts/",{title:data.title , content:data.content}).then(data=>{
-            alert("הפוסט נשלח בהצלחה");
+        POST("/posts/",{title:data.title , content:data.content})
+        .then(data=>{
+            alert("Post sent successfully");
             setPosts([...posts,{...data.data,owner:{username:user.username}}])
             reset();
-        }).catch((err)=>{})
+        }).catch((err)=>{
+            alert("post not add")
+        })
     }
     
     return(
             <form className="m-auto mt-5  d-flex flex-column w-50" onSubmit={handleSubmit(addPost)}>
                 <h1 className="text-center text-decoration-underline">הוספת פוסט</h1>
 
-                    <label>נושא:</label>
+                    <label>title:</label>
                     <textarea {...register("title",validation.post.title)}></textarea>
                     {errors.title && <span className="text-danger">{errors.title.message}</span>}
                     <br/>
-                    <label>תוכן:</label>
+                    <label>context:</label>
                     <textarea {...register("content",validation.post.content)}></textarea>
                     {errors.content && <span className="text-danger">{errors.content.message}</span>}
                     <br/>

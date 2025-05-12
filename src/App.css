@@ -1,5 +1,5 @@
 body{
-  direction: rtl;
+  direction: ltr;
   padding: 15px;
 }
 .pointer{
@@ -8,4 +8,9 @@ body{
 
 .activePost{
   background-color: rgba(127, 255, 212, 0.168);
+}
+
+
+.display_username{
+  color:rgb(42, 165, 101)
 }

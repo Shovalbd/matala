@@ -12,15 +12,15 @@ export default function Profile(props :Prop){
         PUT("/user/update/" ,{id: props.user._id ,username:data.username , newPassword:data.password })
         .then(d=>{
             props.setUser(d.data)
-            alert("הפרופיל עודכן בהצלחה")
+            alert("Profile updated successfully")
         })
-        .catch(err=> alert("הפרופיל לא עודכן "))
+        .catch(err=> alert("Profile not updated"))
     }
 
     return(
         <form className="ProfileComponent" onSubmit={handleSubmit(updateProfile)}>
             <Menu {...props} />
-            <h1 className="text-center">פרופיל המשתמש</h1>
+            <h1 className="text-center">User Profile</h1>
             <br/>
             <div className="card m-auto" style={{width:"18rem"}}>
                 <ul className="list-group list-group-flush p-0">
@@ -42,8 +42,9 @@ export default function Profile(props :Prop){
 
 
                 </ul>
+
+                <input type="submit" className="btn btn-primary" />
             </div>
-            <input type="submit"/>
         </form>
     )
 }

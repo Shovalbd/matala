@@ -16,13 +16,14 @@ export default function Login(props :Prop){
             sessionStorage.setItem("token",auth.accessToken);
             props.setPage("Post");
             props.setLogin(true);
-            GET("/user/").then(data=>{
+            GET("/user/")
+            .then(data=>{
                 let profile :User = data.data
                 props.setUser(profile)
             })
         })
         .catch(err=>{
-            alert("המייל או הסיסמה לא נכונים");
+            alert("The email or password is incorrect.");
         })
     }
 
