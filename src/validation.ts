@@ -1,12 +1,12 @@
 const validation = {
     login:{
         email: {
-            required:"Username required"
+            required:"Email required"
         },
         password:{
             required: "Password required",
-            minLength : {value:4 , message:"Username must be between 4 and 10"},
-            maxLength : {value:10 , message:"Username must be between 4 and 10"},
+            minLength : {value:4 , message:"Password must be 4-10 characters long"},
+            maxLength : {value:10 , message:"Password must be 4-10 characters long"},
         }
     },
     register:{
@@ -15,20 +15,20 @@ const validation = {
         },
         username:{
             required: "Username required",
-            minLength : {value:4 , message:"Username must be between 4 and 10"},
-            maxLength : {value:10 , message:"Username must be between 4 and 10"},
+            minLength : {value:4 , message:"Username must be 4-10 characters long"},
+            maxLength : {value:10 , message:"Username must be 4-10 characters long"},
         },
         password:{
             required: "Password required",
-            minLength : {value:4 , message:"Password must be between 4 and 10"},
-            maxLength : {value:10 , message:"Password must be between 4 and 10"},
+            minLength : {value:4 , message:"Password must be 4-10 characters long"},
+            maxLength : {value:10 , message:"Password must be 4-10 characters long"},
         }
     },
     post:{
             title: {
                 required:"This field is required",
-                minLength:{value:4 , message:"The post subject must be between 4 and 50"},
-                maxLength:{value:50 , message:"The post subject must be between 4 and 50"},
+                minLength:{value:4 , message:"The post subject must be 4-50 characters long"},
+                maxLength:{value:50 , message:"The post subject must be 4-50 characters long"},
             },
             content: {
                 required:"This field is required",
@@ -42,12 +42,12 @@ const validation = {
     profile:{
         username:{
             required: "Username required",
-            minLength : {value:4 , message:"Username must be between 4 and 10"},
-            maxLength : {value:10 , message:"Username must be between 4 and 10"},
+            minLength : {value:4 , message:"Username must be 4-10 characters long"},
+            maxLength : {value:10 , message:"Username must be 4-10 characters long"},
         },
         password:{
-            minLength : {value:4 , message:"Password must be between 4 and 10"},
-            maxLength : {value:10 , message:"Password must be between 4 and 10"},
+            minLength : {value:4 , message:"Password must be 4-10 characters long"},
+            maxLength : {value:10 , message:"Password must be 4-10 characters long"},
         }
     }
 }

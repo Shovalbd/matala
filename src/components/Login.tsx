@@ -27,25 +27,57 @@ export default function Login(props :Prop){
         })
     }
 
-    return(
-        <div> 
-            <Menu {...props} />
-            <form onSubmit={handleSubmit(loginIn)}>
-                <h1 className="text-center">login</h1>
-                <div className="form-group">
-                    <label>email:</label>
-                    <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" {...register("email",validation.login.email)} />
-                    {errors.email && <span className="text-danger">{errors.email.message}</span>}
-                </div>
-                <br/>
-                <div className="form-group">
-                    <label>Password:</label>
-                    <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password"  {...register("password",validation.login.password)}/>
-                    {errors.password && <span className="text-danger">{errors.password.message}</span>}
-                </div>
-                <br/>
-                <input type="submit" className="btn btn-primary" />
+   return (
+  <div>
+    <Menu {...props} />
+
+    <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
+      <div className="card p-4 shadow rounded" style={{ width: '100%', maxWidth: '400px' }}>
+        <h2 className="text-center mb-4">
+          <i className="bi bi-box-arrow-in-right me-2"></i>Login
+        </h2>
+
+        <form onSubmit={handleSubmit(loginIn)}>
+          {/* Email Field */}
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">
+              <i className="bi bi-envelope me-2"></i>Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              className="form-control"
+              placeholder="Enter email"
+              {...register("email", validation.login.email)}
+            />
+            {errors.email && <div className="text-danger small mt-1">{errors.email.message}</div>}
+          </div>
+
+          {/* Password Field */}
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">
+              <i className="bi bi-lock me-2"></i>Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              className="form-control"
+              placeholder="Password"
+              {...register("password", validation.login.password)}
+            />
+            {errors.password && <div className="text-danger small mt-1">{errors.password.message}</div>}
+          </div>
+
+          {/* Submit Button */}
+          <div className="d-grid">
+            <button type="submit" className="btn btn-primary">
+                <i className="bi bi-arrow-right-circle me-1"></i>Log In
+                </button>
+            </div>
             </form>
         </div>
-    )
+      </div>
+     </div>
+    );
+
 }

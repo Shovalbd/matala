@@ -8,6 +8,11 @@ import User from './interface/User';
 import { Page } from './interface/Page';
 import "./App.css"
 
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+
 function App() {
     const [page, setPage]       = useState<Page>("Login")
     const [isLogin , setLogin]  = useState(false);

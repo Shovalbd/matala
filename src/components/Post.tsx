@@ -8,180 +8,225 @@ import { useForm } from "react-hook-form";
 import { CommentForm, PostForm } from "../interface/FormsInputs";
 import validation from "../validation";
 
-export default function Post(props :Prop){
-    let [posts , setPosts] = useState<PostI[]>([]);
-    let [comments , setComments] = useState<Comment[]>([]);
-    let [post , setPost] = useState<PostI>();
+export default function Post(props: Prop) {
+  const [posts, setPosts] = useState<PostI[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [post, setPost] = useState<PostI>();
 
-    const {register,reset,handleSubmit ,formState:{errors}} = useForm<PostForm>();
+  const { register, reset, handleSubmit, formState: { errors } } = useForm<PostForm>();
 
-    useEffect(()=>{
-        GET("/posts/")
-        .then((data)=>{
-            let p :PostI[] = data.data;
-            setPosts(p)
+  useEffect(() => {
+    GET("/posts/")
+      .then((data) => setPosts(data.data))
+      .catch(() => {});
+  }, []);
+
+  function clickPost(thePost: PostI) {
+    if (post?._id === thePost._id) {
+      setPost(undefined);
+      setComments([]);
+    } else {
+      GET(`/posts/${thePost._id}/comments/`)
+        .then((data) => {
+          setPost(thePost);
+          setComments(data.data);
         })
-        .catch((err)=>{})
-    },[]);
-    
-    function clickPost(thePost:PostI){
-        GET("/posts/"+thePost._id+"/comments/")
-        .then((data)=>{
-            let c:Comment[] = data.data;
-            setPost(thePost);
-            setComments(c);
-        })
-        .catch((err)=>{})
+        .catch(() => {});
     }
+  }
 
+  function addComment(data: CommentForm) {
+    POST("/comments/", { comment: data.content, postId: post?._id })
+      .then((data) => {
+        alert("The response was sent successfully.");
+        setComments([...comments, { ...data.data, owner: { username: props.user.username } }]);
+        reset();
+      })
+      .catch(() => {});
+  }
 
-    function addComment(data:CommentForm){
-        POST("/comments/",{comment:data.content,postId:post?._id}).then(data=>{
-            alert("The response was sent successfully.");
-            setComments([...comments,{...data.data,owner:{username:props.user.username}}])
-            reset();
-        }).catch((err)=>{})
-    }
+  function addLike(p: PostI) {
+    POST(`/posts/${p._id}/like/`, { userId: props.user._id })
+      .then(() => {
+        p.likes.push(props.user._id);
+        setPosts([...posts]);
+      })
+      .catch(() => alert("You already liked this post"));
+  }
 
-    function addLike(p:PostI){
-        POST("/posts/"+p._id+"/like/",{userId:p._id})
-        .then(data=>{
-            p.likes.push("...")
-            setPosts([...posts])
-        }).catch((err)=>{
-            alert("You already liked it")
-        })
-    }
+  function updatePost(p: PostI) {
+    const title = prompt("Subject:", p.title) as string;
+    const content = prompt("Content:", p.content) as string;
+    PUT(`/posts/${p._id}`, { title, content })
+      .then(() => {
+        alert("The post was edited successfully");
+        p.title = title;
+        p.content = content;
+        setPosts([...posts]);
+      })
+      .catch(() => {});
+  }
 
+  function updateComment(c: Comment) {
+    const content = prompt("Content:", c.comment) as string;
+    PUT(`/comments/${c._id}`, { comment: content })
+      .then(() => {
+        alert("The response was successfully edited");
+        c.comment = content;
+        setComments([...comments]);
+      })
+      .catch(() => {});
+  }
 
-    function updatePost(p:PostI){
-        let title = prompt("נושא:",p.title) as string;
-        let content = prompt("תוכן:",p.content) as string;
-        PUT("/posts/"+p._id ,{title:title,content:content})
-        .then(data=>{
-            alert("The post was edited successfully")
-            p.title = title;
-            p.content = content;
-            setPosts([...posts]);
-        })
-        .catch((err)=>{})
+  function deletePost(p: PostI) {
+    DELETE(`/posts/${p._id}`)
+      .then(() => setPosts(posts.filter(po => po._id !== p._id)))
+      .catch(() => {});
+  }
 
-    }
+  function deleteComment(c: Comment) {
+    DELETE(`/comments/${c._id}`)
+      .then(() => setComments(comments.filter(co => co._id !== c._id)))
+      .catch(() => {});
+  }
 
-    function updateComment(c:Comment){
-        let content = prompt("תוכן:",c.comment) as string;
-        PUT("/comments/"+c._id,{comment:content}).then(data=>{
-            alert("The response was successfully edited")
-            c.comment = content;
-            setComments([...comments])
-        })
-        .catch((err)=>{})
-    }
-    function deletePost(p:PostI){
-        DELETE("/posts/"+p._id ).then(data=>{
-            setPosts(posts.filter(po=>po._id!=p._id))
-        }).catch((err)=>{})
-    }
+  return (
+    <div className="container py-4">
+      <Menu {...props} />
+      <FormAddPost setPosts={setPosts} posts={posts} user={props.user} />
 
-    function deleteComment(c:Comment){
-        DELETE("/comments/"+c._id ).then(data=>{
-            setComments(comments.filter(co=>co._id!=c._id))
-        }).catch((err)=>{console.log("err",err)})
-    }
+      <h3 className="text-center text-decoration-underline mt-5 mb-4">Post Feed</h3>
 
-    return(
-        <div className="PostComponent">
-            <Menu {...props} />
-            <div className="post_list">
-                {
-                    posts.map(p=>{
-                        let active = p._id == post?._id? "activePost" : ""
-                        return(
-                            <div className={`post_item border m-3 p-3 d-flex flex-column ${active}`} key={p._id} >
-                                <div className="pointer  d-flex flex-column " onClick={()=>clickPost(p)}>
-                                    <div className="post_title text-center text-decoration-underline fs-3">{p.title}</div>
-                                    <div className="display_username  post_title text-center text-decoration-underline fs-6">{p.owner.username}</div>
-                                    {
-                                    p.owner.username == props.user.username ? 
-                                    <div className="align-self-start mb-3 d-flex gap-2">
-                                        <button className="align-self-start mb-3" style={{width:70}} onClick={()=>deletePost(p)}>del</button> 
-                                        <button className="align-self-start mb-3" style={{width:70}} onClick={()=>updatePost(p)}>update</button> 
-                                    
-                                    </div>
-                                        :
-                                        <button  className="align-self-start mb-3" style={{width:70}} onClick={()=>addLike(p)}>LIKE {p.likes.length}</button> 
-                                    }
-                                </div>
-                                {
-                                post?._id == p._id && <div className="comments">
-                                        <h6 className="text-start text-decoration-underline">context:</h6>
-                                        <p>{p.content}</p>
-                                        <h6 className="text-start text-decoration-underline">comments:</h6>
-                                        {comments.map(c=>{
-                                                return(
-                                                    <div className="comment_item d-flex flex-column text-start border p-3 m-2" key={c._id}>
-                                                        <div className="text-decoration-underline">{c.owner.username}</div>
-                                                        <div className="">{c.comment}</div>
-                                                        {c.owner.username == props.user.username && 
-                                                            <div className="align-self-start mb-3 d-flex gap-2">
-                                                                <button className="align-self-start mb-3" onClick={()=>deleteComment(c)}>del</button>
-                                                                <button className="align-self-start mb-3" onClick={()=>updateComment(c)}>update</button>
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                )
-                                        })}
-                                        <br/>
-                                        <form className="m-auto mt-10 d-flex flex-column w-50" onSubmit={handleSubmit(addComment)}>
-                                            <h6 className="text-center text-decoration-underline">add comment</h6>
-                                            <label className="text-decoration-underline">context:</label>
-                                            <textarea {...register("content",validation.post.content)}></textarea>
-                                            {errors.content && <span className="text-danger">{errors.content.message}</span>}
-                                            <br/>
-                                            <input type="submit"/>
-                                        </form>
+      <div className="row">
+        {posts.map((p) => {
+          const isActive = p._id === post?._id;
 
-                                </div>
-                                }
+          return (
+            <div className="col-12 mb-4" key={p._id}>
+              <div
+                className={`card shadow rounded-4 p-3 ${isActive ? "border-primary border-2" : ""}`}
+                style={{ transition: "0.3s" }}
+              >
+                <div
+                  className="text-center mb-2"
+                  onClick={() => clickPost(p)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <h5 className="text-primary">{p.title}</h5>
+                  <h6 className="text-muted">By {p.owner.username}</h6>
+                </div>
+
+                <div className="d-flex justify-content-center gap-3 mt-2 mb-3">
+                  {p.owner.username === props.user.username ? (
+                    <>
+                      <button className="btn btn-sm btn-outline-danger rounded-pill" onClick={() => deletePost(p)}>Delete</button>
+                      <button className="btn btn-sm btn-outline-secondary rounded-pill" onClick={() => updatePost(p)}>Edit</button>
+                    </>
+                  ) : (
+                    <button className="btn btn-sm btn-outline-primary rounded-pill" onClick={() => addLike(p)}>
+                      ❤️ Like {p.likes.length}
+                    </button>
+                  )}
+                </div>
+
+                {isActive && (
+                  <div className="mt-4 px-2">
+                    <h6 className="fw-bold text-decoration-underline">Content:</h6>
+                    <p>{p.content}</p>
+
+                    <h5 className="text-decoration-underline mt-4 d-flex align-items-center gap-2 justify-content-center">
+                      <i className="bi bi-chat-left-heart-fill text-danger"></i>
+                      <span className="fw-bold">Comments</span>
+                    </h5>
+
+                    <div className="p-3 bg-light rounded-4 mt-3">
+                      {comments.map((c) => (
+                        <div className="bg-white border rounded-4 shadow-sm p-3 mb-3" key={c._id}>
+                          <strong>{c.owner.username}</strong>
+                          <p className="mb-2">{c.comment}</p>
+                          {c.owner.username === props.user.username && (
+                            <div className="d-flex gap-2">
+                              <button className="btn btn-sm btn-outline-danger rounded-pill" onClick={() => deleteComment(c)}>Delete</button>
+                              <button className="btn btn-sm btn-outline-secondary rounded-pill" onClick={() => updateComment(c)}>Edit</button>
                             </div>
-                        )
-                    })
-                }
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    <form className="mt-4" onSubmit={handleSubmit(addComment)}>
+                      <h6 className="text-center text-decoration-underline mb-3">Add Comment</h6>
+                      <div className="mb-3">
+                        <label className="form-label">Content:</label>
+                        <textarea
+                          className="form-control"
+                          {...register("content", validation.post.content)}
+                        />
+                        {errors.content && (
+                          <div className="text-danger mt-1">{errors.content.message}</div>
+                        )}
+                      </div>
+
+                      <button type="submit" className="btn btn-primary w-100 rounded-pill">
+                        Submit Comment
+                      </button>
+                    </form>
+                  </div>
+                )}
+              </div>
             </div>
-            <FormAddPost setPosts={setPosts} posts={posts} user={props.user}/>
-        </div>
-    )
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
+function FormAddPost({ setPosts, posts, user }: any) {
+  const { register, reset, handleSubmit, formState: { errors } } = useForm<PostForm>();
 
+  function addPost(data: PostForm) {
+    POST("/posts/", { title: data.title, content: data.content })
+      .then((data) => {
+        alert("Post sent successfully");
+        setPosts([...posts, { ...data.data, owner: { username: user.username } }]);
+        reset();
+      })
+      .catch(() => alert("Post not added"));
+  }
 
-function FormAddPost({setPosts , posts , user} :any){
-    const {register,reset,handleSubmit ,formState:{errors}} = useForm<PostForm>();
+  return (
+    <form
+      className="mt-5 p-4 shadow-sm rounded-4 bg-light"
+      onSubmit={handleSubmit(addPost)}
+    >
+      <h3 className="text-center text-decoration-underline mb-4">Add Post</h3>
 
-    function addPost(data:PostForm){
-        POST("/posts/",{title:data.title , content:data.content})
-        .then(data=>{
-            alert("Post sent successfully");
-            setPosts([...posts,{...data.data,owner:{username:user.username}}])
-            reset();
-        }).catch((err)=>{
-            alert("post not add")
-        })
-    }
-    
-    return(
-            <form className="m-auto mt-5  d-flex flex-column w-50" onSubmit={handleSubmit(addPost)}>
-                <h1 className="text-center text-decoration-underline">הוספת פוסט</h1>
+      <div className="mb-3">
+        <label className="form-label">Title:</label>
+        <textarea
+          className="form-control"
+          {...register("title", validation.post.title)}
+        />
+        {errors.title && (
+          <div className="text-danger">{errors.title.message}</div>
+        )}
+      </div>
 
-                    <label>title:</label>
-                    <textarea {...register("title",validation.post.title)}></textarea>
-                    {errors.title && <span className="text-danger">{errors.title.message}</span>}
-                    <br/>
-                    <label>context:</label>
-                    <textarea {...register("content",validation.post.content)}></textarea>
-                    {errors.content && <span className="text-danger">{errors.content.message}</span>}
-                    <br/>
-                <input type="submit"/>
-            </form>
-    )
+      <div className="mb-3">
+        <label className="form-label">Content:</label>
+        <textarea
+          className="form-control"
+          {...register("content", validation.post.content)}
+        />
+        {errors.content && (
+          <div className="text-danger">{errors.content.message}</div>
+        )}
+      </div>
+
+      <button type="submit" className="btn btn-primary w-100 rounded-pill">
+        Submit Post
+      </button>
+    </form>
+  );
 }

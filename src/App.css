@@ -1,16 +1,162 @@
 body{
+  background-color: #929495;
   direction: ltr;
   padding: 15px;
 }
+
 .pointer{
   cursor: pointer;
 }
 
 .activePost{
-  background-color: rgba(127, 255, 212, 0.168);
+  background-color: rgba(66, 49, 248, 0.168);
 }
 
 
 .display_username{
-  color:rgb(42, 165, 101)
+  color:rgb(44, 42, 165)
+}
+
+i.bi {
+  color: #4facfe;
+  font-size: 1.2rem;
+  vertical-align: middle;
+  margin-right: 0.4rem;
+}
+
+
+.card {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.navbar-nav .nav-link {
+  font-weight: 500;
+  color: #4facfe;
+  transition: color 0.2s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #2a73c1;
+}
+
+textarea.form-control {
+  resize: none;
+  min-height: 80px;
+}
+
+.card {
+  border-radius: 1rem;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  background-color: #ffffff;
+}
+
+.card-title,
+.card-subtitle {
+  color: #444;
+}
+
+h5,
+h6 {
+  font-weight: 600;
+}
+
+
+.btn {
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn-outline-primary {
+  color: #6c63ff;
+  border-color: #6c63ff;
+}
+.btn-outline-primary:hover {
+  background-color: #6c63ff;
+  color: #fff;
+}
+
+.btn-outline-secondary {
+  color: #7d8da1;
+  border-color: #7d8da1;
+}
+.btn-outline-secondary:hover {
+  background-color: #7d8da1;
+  color: #fff;
+}
+
+.btn-outline-danger {
+  color: #e35d6a;
+  border-color: #e35d6a;
+}
+.btn-outline-danger:hover {
+  background-color: #e35d6a;
+  color: #fff;
+}
+
+.btn-success {
+  background-color: #71c9ce;
+  border-color: #71c9ce;
+}
+.btn-success:hover {
+  background-color: #63b2b7;
+}
+
+textarea,
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  border-radius: 0.5rem !important;
+  border: 1px solid #ced4da;
+}
+
+.form-control:focus {
+  border-color: #6c63ff;
+  box-shadow: 0 0 0 0.25rem rgba(108, 99, 255, 0.25);
+}
+
+.comments .border {
+  background-color: #f1f3f5;
+  border-radius: 0.75rem;
+}
+
+.activePost,
+.card.border-primary {
+  background-color: #eef4ff;
+}
+
+
+.MenuComponent {
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.MenuComponent ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.nav-link {
+  color: #6c63ff;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
 }
